@@ -4,6 +4,8 @@ Xây dựng ứng dụng Note.
 
 Đây là bài thu hoach của học phần **Phát triển ứng dụng di động đa nền tảng** đang được giảng dạy tại **Khoa Công nghệ thông tin của Trường Đại học Mỏ - Địa chất**
 
+![Screenshot_26.png](images/noteapp.gif)
+
 ## Tổng quan
 
 Ứng dụng được xây dựng trên việc kế thừa template tại link: https://github.com/chuyentt/mynote
