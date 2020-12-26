@@ -9,6 +9,8 @@ abstract class Repository<T> {
 
   Future<dynamic> update(T item);
 
+  Future<dynamic> softDelete(T item);
+
   Future<dynamic> delete(T item);
 
   Future<List<T>> items();

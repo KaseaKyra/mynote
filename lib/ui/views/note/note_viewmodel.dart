@@ -5,16 +5,16 @@ import 'package:stacked/stacked.dart';
 import 'note_model.dart';
 
 /// Trạng thái của view
-enum NoteViewState { listView, itemView, insertView, updateView }
+enum NoteViewState { listView, itemView}
 
 class NoteViewModel extends BaseViewModel {
-  final title = 'Note View Model';
+  final title = 'Note App';
 
   /// Danh sách các bản ghi được load bất đồng bộ bên trong view model,
   /// khi load thành công thì thông báo đến view để cập nhật trạng thái
   var _items = <Note>[];
 
-  /// ### Danh sách các bản ghi dùng để hiển thị trên ListView
+  /// Danh sách các bản ghi dùng để hiển thị trên ListView
   /// Vì quá trình load items là bất đồng bộ nên phải tạo một getter
   /// `get items => _items` để tránh xung đột
   List<Note> get items => _items;
@@ -41,7 +41,6 @@ class NoteViewModel extends BaseViewModel {
   var editingControllerTitle = TextEditingController();
   var editingControllerDesc = TextEditingController();
 
-  ///
   var repo = NoteRepository();
 
   Future init() async {
@@ -66,17 +65,62 @@ class NoteViewModel extends BaseViewModel {
     });
   }
 
-  void updateItem() {
-    editingControllerTitle.text = editingItem.title;
-    editingControllerDesc.text = editingItem.desc;
-    state = NoteViewState.updateView;
+  void viewItem() {
+    // Nếu chọn edit item
+    if (editingItem != null) {
+      editingControllerTitle.text = editingItem.title;
+      editingControllerDesc.text = editingItem.desc;
+    }
+
+    state = NoteViewState.itemView;
   }
 
   void saveItem() {
-    // TODO lưu editingItem
+    // 1. CREATE ITEM
+    var title = editingControllerTitle.text;
+    var desc = editingControllerDesc.text;
+
+    if (editingItem == null && title != null && desc != null) {
+      var item = Note(title, desc);
+      repo.insert(item).then((value) {
+        print(value);
+        // TODO: return list
+        state = (NoteViewState.listView);
+        reloadItems();
+        return;
+      });
+    }
+    // 2. UPDATE ITEM
+    var editNote = _getNewNote();
+
+    // TODO lưu editing item
+    repo.update(editNote).then((value) {
+      print(value);
+      _state = NoteViewState.listView;
+    });
 
     // TODO editingItem = null
     editingItem = null;
-    notifyListeners();
+    reloadItems();
+  }
+
+  Note _getNewNote() {
+    return Note.fromMap({
+      'id': editingItem.id,
+      'title': editingControllerTitle.text,
+      'desc': editingControllerDesc.text,
+      'isDeleted': editingItem.isDeleted,
+    });
+  }
+
+  /*
+  * Xóa item
+  * */
+  delete() async {
+    repo.delete(editingItem).then((value) {
+      _state = NoteViewState.listView;
+    });
+
+    return notifyListeners();
   }
 }

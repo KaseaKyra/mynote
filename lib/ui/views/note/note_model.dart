@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 
 class Note {
   /// id tự sinh ra ngẫu nhiên
-  String id = UniqueKey()
-      .hashCode
-      .toUnsigned(20)
-      .toRadixString(16)
-      .padLeft(5, '0');
+  String id =
+      UniqueKey().hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0');
 
   final String title;
   final String desc;
@@ -34,6 +31,7 @@ class Note {
     for (Map map in query) {
       items.add(Note.fromMap(map));
     }
+
     return items;
   }
 
