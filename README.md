@@ -1,23 +1,67 @@
 # mynote
-Xây dựng ứng dụng Note
-(Đây là phần thực hành của nội dung chương 4 trong học phần *Phát triển ứng dụng di động đa nền tảng* đang được giảng dạy tại Khoa Công nghệ thông tin của Trường Đại học Mỏ - Địa chất)
 
-## Bắt đầu
+Xây dựng ứng dụng Note.
 
-### Tạo một kho lưu trữ
-Bài viết này sử dụng kho lưu trữ mẫu (template) GitHub để giúp bạn dễ dàng bắt đầu. Mẫu có một ứng dụng Flutter rất đơn giản để chúng ta có thể sử dụng như một điểm khởi đầu.
+Đây là bài thu hoach của học phần **Phát triển ứng dụng di động đa nền tảng** đang được giảng dạy tại **Khoa Công nghệ thông tin của Trường Đại học Mỏ - Địa chất**
 
-> 1. Đảm bảo rằng bạn đã đăng nhập vào GitHub và điều hướng đến vị trí sau để tạo một kho lưu trữ mới:
-https://github.com/chuyentt/mynote/generate - nếu liên kết không hoạt động, vui lòng đăng nhập vào GitHub và thử lại.
-> 2. Đặt tên cho Repository name (kho lưu trữ mã nguồn) của bạn là:
-`mynote`
+## Tổng quan
 
-Chọn **`Create repository from template`**.
+Ứng dụng được xây dựng trên việc kế thừa template tại link: https://github.com/chuyentt/mynote
 
-### Sao chép kho lưu trữ
-Với kho lưu trữ được tạo trong tài khoản GitHub của bạn, hãy sao chép dự án vào máy cục bộ của bạn bằng lệnh sau với công cụ giao tiếp dòng lệnh `Command Prompt` trên Windows hoặc `terminal` trên macOS.
-`git clone https://github.com/<YOUR_ACCOUNT_NAME>/mynote.git`
+Cấu trúc thư mục:
 
-Hoặc sao chép nó về bằng công cụ `Visual Studio Code` bằng cách đi đến menu *`View > Command Palette...`* rồi nhập `Git: Clone` sau đó cung cấp URL của kho lưu trữ hoặc chọn nguồn kho lưu trữ `https://github.com/<YOUR_ACCOUNT_NAME>/mynote.git`.
+```
+lib
+--- main.dart
+--- repository
+--- --- local_repository.dart
+--- --- repository.dart
+--- ui
+--- --- views
+--- --- --- note
+--- --- --- --- note_model.dart
+--- --- --- --- note_repository.dart
+--- --- --- --- note_view.dart
+--- --- --- --- note_viewmodel.dart
+--- --- --- --- widgets
+--- --- --- -- --- note_view_item.dart
+```
 
-Chờ một lúc và mở nó ra để tiếp tục viết mã.
+Một số phần được cập nhật:
+
+1. Xóa bỏ widget **note_view_item_edit.dart**: trong ``ui -> views -> note -> widgets``. Mục đích của việc này nhằm gộp hai hành động thêm mới và cập nhật thành dùng chung một view duy nhất là **note_view_item.dart**.
+
+2. Chỉnh sửa lại tính năng thêm mới một ghi chú với tiêu đề và nội dung do người dùng nhập vào, thay cho việc trước đó thêm mặc định với giá trị là thời gian hiện tại.
+
+3. Thêm tính năng cập nhật một ghi chú.
+
+4. Thêm tính năng xóa một ghi chú. Với tính năng xóa ghi chú xây dựng gồm 2 tính năng nhỏ, gồm: xóa tạm thời và xóa vĩnh viễn.
+
+## Mã nguồn
+
+###### 1. main.dart
+
+File main sẽ import trực tiếp một view duy nhất là NoteView.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:mynote/ui/views/note/note_view.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: NoteView(),
+    );
+  }
+}
+```
+
+###### 2. Repository
+
+###### 3. Bên trong note folder
