@@ -22,12 +22,19 @@ class NoteView extends StatelessWidget {
                       return Dismissible(
                         key: Key(item.id),
                         onDismissed: (direction) {
-                          // Vuốt để xóa note.
+                          /*
+                          * Vuốt để xóa note.
+                          * Các bước để xóa 1 note.
+                          *     1. Xóa item trên giao diện
+                          *     2. Xóa trong db
+                          * */
                           model.items.removeAt(index);
                           model.editingItem = item;
                           model.delete();
                         },
-                        background: Container(color: Colors.red), // TODO: sau sẽ setting theme
+                        // set background color khi vuốt
+                        // TODO: sau khi thiết kế tính năng setting theme sẽ làm global
+                        background: Container(color: Colors.lightBlueAccent),
                         child: ListTile(
                           title: Text(item.title),
                           subtitle: Text(item.desc),
@@ -48,6 +55,7 @@ class NoteView extends StatelessWidget {
             ? FloatingActionButton(
                 child: Icon(Icons.add),
                 onPressed: () {
+                  // tạo mới một note
                   model.viewItem();
                 },
               )

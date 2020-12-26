@@ -5,7 +5,7 @@ import 'package:stacked/stacked.dart';
 import 'note_model.dart';
 
 /// Trạng thái của view
-enum NoteViewState { listView, itemView}
+enum NoteViewState { listView, itemView }
 
 class NoteViewModel extends BaseViewModel {
   final title = 'Note App';
@@ -54,17 +54,21 @@ class NoteViewModel extends BaseViewModel {
     });
   }
 
-  void addItem() {
-    var timestamp = DateTime.now();
-    var title = timestamp.millisecondsSinceEpoch.toString();
-    var desc = timestamp.toLocal().toString();
+  // void addItem() {
+  //   var timestamp = DateTime.now();
+  //   var title = timestamp.millisecondsSinceEpoch.toString();
+  //   var desc = timestamp.toLocal().toString();
+  //
+  //   var item = Note(title, desc);
+  //   repo.insert(item).then((value) {
+  //     reloadItems();
+  //   });
+  // }
 
-    var item = Note(title, desc);
-    repo.insert(item).then((value) {
-      reloadItems();
-    });
-  }
-
+  /*
+  * Nếu chọn edit => hiển thị chi tiết 1 note
+  * còn chọn create => chỉ cần chuyển sang màn note_view_item
+  * */
   void viewItem() {
     // Nếu chọn edit item
     if (editingItem != null) {
@@ -75,21 +79,25 @@ class NoteViewModel extends BaseViewModel {
     state = NoteViewState.itemView;
   }
 
+  /*
+   * Hàm này xử chung tạo mới và cập nhật item
+   * */
   void saveItem() {
     // 1. CREATE ITEM
+    // lấy giá trị hiện tại trong TextEditingController
     var title = editingControllerTitle.text;
     var desc = editingControllerDesc.text;
 
     if (editingItem == null && title != null && desc != null) {
       var item = Note(title, desc);
       repo.insert(item).then((value) {
-        print(value);
-        // TODO: return list
         state = (NoteViewState.listView);
         reloadItems();
-        return;
       });
+
+      return;
     }
+
     // 2. UPDATE ITEM
     var editNote = _getNewNote();
 
@@ -121,6 +129,7 @@ class NoteViewModel extends BaseViewModel {
       _state = NoteViewState.listView;
     });
 
+    editingItem = null;
     return notifyListeners();
   }
 }
